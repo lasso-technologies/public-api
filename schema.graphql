@@ -1,0 +1,286 @@
+type Device {
+  esn: String!
+  type: String!
+  configuration: String!
+  lastReport: String
+  status: String
+  ouPath: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type LightweightGeofence {
+  id: Int!
+  type: String!
+  name: String!
+}
+
+type Asset {
+  id: String!
+  name: String!
+  identifier: String!
+  details: String
+  status: String
+  coordinates: Coordinates
+  depth: Float
+  gallons: Float
+  battery: Float
+  ping: Float
+  ouPath: String!
+  deviceESN: String
+  lastReport: String
+  lastPositionReport: String
+  lastLevelReport: String
+  geofences: [LightweightGeofence]
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Coordinates {
+  lon: Float
+  lat: Float
+}
+
+
+type Query {
+  getAsset(id: String!): Asset
+  searchAssets(filter: SearchableAssetFilterInput, sort: [SearchableAssetSortInput], limit: Int, nextToken: String, from: Int, aggregates: [SearchableAssetAggregationInput]): SearchableAssetConnection
+  getDevice(esn: String!): Device
+  listDevicesByOUPath(rootOUPath: String!, ouPath: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelDeviceFilterInput, limit: Int, nextToken: String): ModelDeviceConnection
+}
+
+type ModelDeviceConnection {
+  items: [Device]!
+  nextToken: String
+}
+
+input ModelStringKeyConditionInput {
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  between: [String]
+  beginsWith: String
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+input ModelDeviceFilterInput {
+  esn: ModelStringInput
+  type: ModelStringInput
+  configuration: ModelStringInput
+  geoJson: ModelStringInput
+  lastReport: ModelStringInput
+  status: ModelStringInput
+  ouPath: ModelStringInput
+  rootOUPath: ModelStringInput
+  and: [ModelDeviceFilterInput]
+  or: [ModelDeviceFilterInput]
+  not: ModelDeviceFilterInput
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+type SearchableAssetConnection {
+  items: [Asset]!
+  nextToken: String
+  total: Int
+  aggregateItems: [SearchableAggregateResult]!
+}
+
+type SearchableAggregateResult {
+  name: String!
+  result: SearchableAggregateGenericResult
+}
+
+type SearchableAggregateScalarResult {
+  value: Float!
+}
+
+type SearchableAggregateBucketResult {
+  buckets: [SearchableAggregateBucketResultItem]
+}
+
+type SearchableAggregateBucketResultItem {
+  key: String!
+  doc_count: Int!
+}
+
+union SearchableAggregateGenericResult = SearchableAggregateScalarResult | SearchableAggregateBucketResult
+
+input SearchableStringFilterInput {
+  ne: String
+  gt: String
+  lt: String
+  gte: String
+  lte: String
+  eq: String
+  match: String
+  matchPhrase: String
+  matchPhrasePrefix: String
+  multiMatch: String
+  exists: Boolean
+  wildcard: String
+  regexp: String
+  range: [String]
+}
+
+input SearchableIntFilterInput {
+  ne: Int
+  gt: Int
+  lt: Int
+  gte: Int
+  lte: Int
+  eq: Int
+  range: [Int]
+}
+
+input SearchableFloatFilterInput {
+  ne: Float
+  gt: Float
+  lt: Float
+  gte: Float
+  lte: Float
+  eq: Float
+  range: [Float]
+}
+
+input SearchableBooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input SearchableIDFilterInput {
+  ne: ID
+  gt: ID
+  lt: ID
+  gte: ID
+  lte: ID
+  eq: ID
+  match: ID
+  matchPhrase: ID
+  matchPhrasePrefix: ID
+  multiMatch: ID
+  exists: Boolean
+  wildcard: ID
+  regexp: ID
+  range: [ID]
+}
+
+input SearchableAssetFilterInput {
+  id: SearchableIDFilterInput
+  name: SearchableStringFilterInput
+  identifier: SearchableStringFilterInput
+  details: SearchableStringFilterInput
+  status: SearchableStringFilterInput
+  depth: SearchableFloatFilterInput
+  gallons: SearchableFloatFilterInput
+  battery: SearchableFloatFilterInput
+  ping: SearchableFloatFilterInput
+  ouPath: SearchableStringFilterInput
+  deviceESN: SearchableStringFilterInput
+  lastReport: SearchableStringFilterInput
+  lastPositionReport: SearchableStringFilterInput
+  lastLevelReport: SearchableStringFilterInput
+  createdAt: SearchableStringFilterInput
+  updatedAt: SearchableStringFilterInput
+  and: [SearchableAssetFilterInput]
+  or: [SearchableAssetFilterInput]
+  not: SearchableAssetFilterInput
+}
+
+enum SearchableSortDirection {
+  asc
+  desc
+}
+
+enum SearchableAssetSortableFields {
+  id
+  name
+  identifier
+  details
+  status
+  ouPath
+  deviceESN
+  lastReport
+  lastPositionReport
+  lastLevelReport
+  createdAt
+  updatedAt
+}
+
+input SearchableAssetSortInput {
+  field: SearchableAssetSortableFields
+  direction: SearchableSortDirection
+}
+
+enum SearchableAggregateType {
+  terms
+  avg
+  min
+  max
+  sum
+}
+
+enum SearchableAssetAggregateField {
+  id
+  name
+  identifier
+  details
+  status
+  ouPath
+  deviceESN
+  lastReport
+  lastPositionReport
+  lastLevelReport
+  createdAt
+  updatedAt
+}
+
+input SearchableAssetAggregationInput {
+  name: String!
+  type: SearchableAggregateType!
+  field: SearchableAssetAggregateField!
+}
+
