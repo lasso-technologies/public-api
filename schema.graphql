@@ -21,11 +21,12 @@ type Asset {
   identifier: String!
   details: String
   status: String
+  deviceStatus: String
   coordinates: Coordinates
   depth: Float
-  gallons: Float
+  volume: Float
   battery: Float
-  ping: Float
+  distanceToFluid: Float
   ouPath: String!
   deviceESN: String
   lastReport: String

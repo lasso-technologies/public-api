@@ -12,6 +12,7 @@ def main() -> None:
     # """
     )
 
+    parser.add_argument("asset_id", type=str, help="Required Asset ID")
     parser.add_argument(
         "--endpoint", type=str, help="Optional endpoint value to override the default", default=DEFAULT_HOST
     )
@@ -20,7 +21,7 @@ def main() -> None:
     api = LassoAPI(host=args.endpoint)
     # Use JSON format string for the query. It does not need reformatting.
 
-    get_asset_result = api.get_asset("e695f67c-d3b8-46f9-a6e3-8dcd19fb34ba")
+    get_asset_result = api.get_asset(args.asset_id)
     if get_asset_result["status"] != "success":
         print(f"Error calling getAsset: {get_asset_result['message']}.\n"
               "Ensure proper AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are set and "

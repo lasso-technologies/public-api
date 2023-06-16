@@ -42,21 +42,22 @@ class LassoAPI:
 
     def get_asset(self, asset_id: str) -> Dict:
         query = """
-        query getAsset($id: String!) {
+        query getAsset($id: ID!) {
           getAsset(id: $id) {
             id
             identifier
             name
             details
             status
+            deviceStatus
             coordinates {
               lat
               lon
             }
             depth
-            gallons    
+            volume    
             battery
-            ping
+            distanceToFluid
             ouPath      
             deviceESN
             lastLevelReport

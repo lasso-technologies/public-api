@@ -33,11 +33,12 @@ type Asset {
   identifier: String!
   details: String
   status: String
+  deviceStatus: String    
   coordinates: Coordinates
   depth: Float
-  gallons: Float
+  volume: Float
   battery: Float
-  ping: Float
+  distanceToFluid: Float
   ouPath: String!
   deviceESN: String
   lastReport: String
@@ -57,13 +58,15 @@ tracking device is attached to at any given time.
 - identifier - Customer identifier for the asset
 - ouPath – String representation of the assigned “Path” of the asset within a customer organization.
 - deviceESN – Electronic Serial Number (ESN) of the tracking device attached to the asset.  An asset can exist without an assigned tracking device.
+- status - "OK", "Warning", "Issue", or "None".  This value depends on the asset configuration.  Contact your Lasso representative for details
+- deviceStatus - A textual description of the device health, indicating when there is missing or out-of-date telemetry or position data.
 - details – additional textual data supplied by the customer.
 - coordinates – Latitude / Longitude coordinates most recently recorded
 - geofences – Names and type information about any geofences that the asset is within based on most recent position data
 - depth – Most recent depth value for the asset according to the most recent device telemetry
-- gallons – Most recent volume value for the asset according to the most recent device telemetry
+- volume – Most recent volume value for the asset according to the most recent device telemetry.  Expressed in the unit of measure (i.e. Gallons) according to the device configuration.
 - battery – Most recent battery voltage sent from the device 
-- ping – Most recent “distance to fluid” sent from the asset according to the most recent device telemetry
+- distanceToFluid – Most recent “distance to fluid” sent from the asset according to the most recent device telemetry
 - lastReport – UTC Time last received data of any kind from the device associated with the asset
 - lastPositionReport –  UTC Time last received GPS position data from the device associated with the asset
 - lastLevelReport – UTC Time last received level telemetry data from the device associated with the asset
@@ -80,21 +83,22 @@ details about the asset.
 **Request:**
 
 ```graphql
-query getAsset($id: String!) {
+query getAsset($id: ID!) {
   getAsset(id: $id) {
     id
     identifier
     name
     details
     status
+    deviceStatus
     coordinates {
       lat
       lon
     }
     depth
-    gallons    
+    volume    
     battery
-    ping
+    distanceToFluid
     ouPath      
     deviceESN
     lastLevelReport
@@ -123,15 +127,16 @@ following:
             "identifier": "lso-6fh-4wx-bx4",
             "name": "Offshore Tank #1",
             "details": null,
-            "status": null,
+            "status": "None",
+            "deviceStatus": "OK",
             "coordinates": {
                 "lat": 28.6496,
                 "lon": -92.0701
             },
             "depth": 60.1,
-            "gallons": 481.0,
+            "volume": 481.0,
             "battery": 7.300000000000001,
-            "ping": 9.8,
+            "distanceToFluid": 9.8,
             "ouPath": "OU-SAMPLE",
             "deviceESN": "0-4246000",
             "lastLevelReport": "2023-04-19T16:13:29.000Z",
